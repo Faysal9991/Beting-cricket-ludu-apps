@@ -2,24 +2,24 @@ import 'dart:ui';
 
 import 'package:beting_app/bottom_nevigation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
 import '../../../Helper/fbase.dart';
 import '../../../widget/login_widget.dart';
 import 'login_screen.dart';
 
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+   SignUpScreen({Key? key}) : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
+  
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+   TextEditingController name = TextEditingController();
+
   FireBase fireBase = FireBase();
 
   @override
@@ -87,10 +87,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               SizedBox(height: h*0.02,),
   LoginWidget( h: h*0.06, w: w*0.9,
                                 child: TextFormField(
-                                  controller: password,
+                                  controller: name,
+                                  
                                   decoration: InputDecoration(
-
-                                      labelText: "Input your fast name",
+                  hintText: "Input your fast name",
                                       contentPadding: const EdgeInsets.all(20.0),
                                       border: InputBorder.none,
                                     
@@ -100,10 +100,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                              SizedBox(height: h*0.02,),
                              LoginWidget( h: h*0.06, w: w*0.9,
                                 child: TextFormField(
-                                  controller: password,
+                                 controller: name,
                                   decoration: InputDecoration(
 
-                                      labelText: "Input your last name",
+                                      hintText: "Input your last name",
                                       contentPadding: const EdgeInsets.all(20.0),
                                       border: InputBorder.none,
                                     
@@ -120,7 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   controller: password,
                                   decoration: InputDecoration(
 
-                                      labelText: "পাসওয়ার্ড লিখুন",
+                                      hintText: "পাসওয়ার্ড লিখুন",
                                       contentPadding: const EdgeInsets.all(20.0),
                                       border: InputBorder.none,
                                       suffixIcon: IconButton(onPressed: (){},

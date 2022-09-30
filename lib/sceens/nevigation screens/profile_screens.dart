@@ -5,14 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../Helper/fbase.dart';
 import '../../Helper/style.dart';
 
+import '../../models/profilemodel.dart';
+import '../../widget/login_widget.dart';
 import '../rechargepage.dart';
 import '../withdrawscreen.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
-
+   ProfileScreen({Key? key}) : super(key: key);
+  FireBase fireBase = FireBase();
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -83,7 +86,9 @@ class ProfileScreen extends StatelessWidget {
                                       builder: (context) =>
                                         RechargeScreen()));
                             },
-                            child:  Text("Recarge",style: GoogleFonts.lato(fontSize: 12,fontWeight: FontWeight.bold),)),
+                            child:  Text("Recarge",
+                            style: GoogleFonts.lato(fontSize: 12,
+                            fontWeight: FontWeight.bold),)),
                       ),
                       SizedBox(width: width * 0.03),
                       SizedBox(
@@ -144,8 +149,127 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
-           SizedBox(height: height*0.3,),
-             SizedBox(
+            SizedBox(height: height*0.01,),
+              Container(
+                    height: height * 0.2,
+                    width: width * 0.9,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                       
+                        borderRadius: BorderRadius.circular(5)),
+                    child: StreamBuilder<ProfileModel>(
+                      stream: fireBase.myProfileStream(),
+                      builder: (context, snap) {
+                        return snap.hasData?LoginWidget(
+                          h: height * 0.02,
+                          w: width * 0.9,
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: (){  Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          WithDrawRequest()));
+                            },
+                                      child: CircleAvatar(radius: width*0.13,
+                                      backgroundColor: const Color(0xff54BA4F),
+                                    
+                                        child: CircleAvatar(
+                                          radius: width*0.11,
+                                          backgroundColor: const Color(0xffCEDBD2),
+                                          child: Padding(
+                                       padding:  EdgeInsets.only(top: height*0.036),
+                                       child: Column(
+                                    
+                                         children: [
+                                           Text("Total win",style: GoogleFonts.lato(fontSize: 14,color: Colors.black,),),
+                                           Text("000 BDT",style: GoogleFonts.lato(fontSize: 10,fontWeight: FontWeight.bold,color: Colors.green),)
+                                         ],
+                                       ),
+                                          ),),
+                                          ),
+                                    ),
+                                        SizedBox(width: width*0.01,),
+                                    InkWell(
+                                      onTap: () {
+                                          Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          RechargeScreen()));
+                            },
+                                    
+                                      child: CircleAvatar(radius: width*0.13,
+                                                              backgroundColor: Colors.red,
+                                    
+                                                                child: CircleAvatar(
+                                                                  radius: width*0.11,
+                                                                  backgroundColor: const Color(0xffFBECEC),
+                                                                  child: Padding(
+                                       padding:  EdgeInsets.only(top: height*0.036),
+                                       child: Column(
+                                    
+                                         children: [
+                                           Text("Total Losse",style: GoogleFonts.lato(fontSize: 14,color: Colors.black),),
+                                           Text("000 BDT",style: GoogleFonts.lato(fontSize: 10,fontWeight: FontWeight.bold,color:Colors.red),)
+                                         ],
+                                       ),
+                                                                  ),),
+                                                                  ),
+                                    ),
+                                                                SizedBox(width: width*0.04,),
+                                    CircleAvatar(radius: width*0.16,
+                                    backgroundColor: Colors.teal,
+
+                                      child: InkWell(
+                                        onTap: (){  Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          RechargeScreen()));},
+                                        child: CircleAvatar(
+                                          radius: width*0.14,
+                                          backgroundColor: const Color(0xffCEDBD2),
+                                          child: Padding(
+                                            padding:  EdgeInsets.only(top: height*0.036),
+                                            child: Column(
+                                      
+                                              children: [
+                                                Text("Balance",style: GoogleFonts.lato(fontSize: 14),),
+                                                Text("${snap.data!.totalBalance} BDT",style: GoogleFonts.lato(fontSize: 10,fontWeight: FontWeight.bold,color: Colors.green),)
+                                              ],
+                                            ),
+                                          ),),
+                                      ),
+                                        ),
+
+                                   ],
+                                ),
+                              ),
+                              Positioned(
+                                top: height*0.08,
+                                left: width*0.23,
+                                child: const CircleAvatar(
+                                  radius: 12,
+                                    backgroundColor: Colors.green,
+                                  child: CircleAvatar(
+                                    radius: 10,
+                                    backgroundColor: Colors.white,
+                                    child: Icon(FontAwesomeIcons.upLong,size: 15,color: Colors.green,)),
+                                ),
+                              )
+                            ],
+                          ),
+                        ):Center(child: CircularProgressIndicator(),);
+                      }
+                    ),
+                  ),
+                 
+     SizedBox(
               height: height*0.05,
               width: width*0.9,
               child: ElevatedButton(

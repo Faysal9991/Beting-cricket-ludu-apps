@@ -1,12 +1,11 @@
 
+
 import 'package:beting_app/Helper/fbase.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../models/mainadminmodel.dart';
 
 
 class RechargeScreen extends StatefulWidget {
@@ -20,353 +19,549 @@ class _RechargeScreenState extends State<RechargeScreen> {
   FireBase fireBase = FireBase();
   TextEditingController amount = TextEditingController();
   TextEditingController transactionId = TextEditingController();
-  final List<String> items = [
-    '500',
-    '1000',
-    '1500',
-    '2000',
-  ];
+
   String? selectedValue;
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4,
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
+    return GestureDetector(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.teal,
-          title: Text("Recharge",
-              style: GoogleFonts.oleoScript(color: Colors.white)),
-          bottom: TabBar(tabs: [
-            Tab(
-              child: SvgPicture.asset("assets/bkash.svg"),
-            ),
-            Tab(
-              child: SvgPicture.asset("assets/nogod.svg")
-            ),
-            Tab(
-              child: SvgPicture.asset("assets/roket.svg")
-            ),
-            Tab(
-              child: SvgPicture.asset("assets/binance.svg")
-            ),
-          ]),
-        ),
-        body: TabBarView(children: [
-          SizedBox(
-            height: 200,
-            child: Column(
-              children: [
-                StreamBuilder<MainAdminModel>(
-                    stream: fireBase.mainadmindatas(),
-                    builder: (context, snapshot) {
-                      return snapshot.hasData
-                          ? Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextButton(
-                            onPressed: () {
-                              Clipboard.setData(ClipboardData(
-                                  text: snapshot.data!.bkashnumber))
-                                  .then((value) {
-                                final snackbar = SnackBar(
-                                    content: Text(
-                                        "Copied: ${snapshot.data!.bkashnumber}"));
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackbar);
-                              });
-                            },
-                            child: Text(
-                                "Send Money to this number ${snapshot.data!.bkashnumber}")),
-                      )
-                          : const CircularProgressIndicator();
-                    }),
-                DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    hint: Text(
-                      'Select Pakage',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                    items: items
-                        .map((item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ))
-                        .toList(),
-                    value: selectedValue,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedValue = value as String;
-                        amount.text = selectedValue!;
-                      });
-                    },
-                    buttonHeight: 40,
-                    buttonWidth: 140,
-                    itemHeight: 40,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: transactionId,
-                    decoration: const InputDecoration(
-                        hintText: "input your transactionId",
-                        border: OutlineInputBorder()),
-                  ),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      fireBase
-                          .rechargeTobalance(
-                          amount.text.trim(), transactionId.text.trim())
-                          .then((value) {
-                        print(value);
-                      });
-                    },
-                    child: const Text("Send request"))
-              ],
-            ),
+          appBar: AppBar(
+            backgroundColor: Colors.teal,
+            title: Text("Recharge",
+                style: GoogleFonts.oleoScript(color: Colors.white)),
           ),
-          SizedBox(
-            height: 200,
-            child: Column(
-              children: [
-                StreamBuilder<MainAdminModel>(
-                    stream: fireBase.mainadmindatas(),
-                    builder: (context, snapshot) {
-                      return snapshot.hasData
-                          ? Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextButton(
-                            onPressed: () {
-                              Clipboard.setData(ClipboardData(
-                                  text: snapshot.data!.bkashnumber))
-                                  .then((value) {
-                                final snackbar = SnackBar(
-                                    content: Text(
-                                        "Copied: ${snapshot.data!.bkashnumber}"));
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackbar);
-                              });
-                            },
-                            child: Text(
-                                "Send Money to this number ${snapshot.data!.bkashnumber}")),
-                      )
-                          : const CircularProgressIndicator();
-                    }),
-                DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    hint: Text(
-                      'Select Item',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                    items: items
-                        .map((item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ))
-                        .toList(),
-                    value: selectedValue,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedValue = value as String;
-                      });
-                    },
-                    buttonHeight: 40,
-                    buttonWidth: 140,
-                    itemHeight: 40,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: transactionId,
-                    decoration: const InputDecoration(
-                        hintText: "input your transactionId",
-                        border: OutlineInputBorder()),
-                  ),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      fireBase
-                          .rechargeTobalance(
-                          selectedValue == items[0]
-                              ? "6"
-                              : selectedValue == items[1]
-                              ? "10"
-                              : selectedValue == items[2]
-                              ? "25"
-                              : "40",
-                          transactionId.text.trim())
-                          .then((value) {
-                        print(value);
-                      });
-                    },
-                    child: const Text("Send request"))
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 200,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextButton(
-                      onPressed: () {
-                        Clipboard.setData(const ClipboardData(
-                            text: "03898928292"))
-                            .then((value) {
-                          final snackbar =  SnackBar(
-                              content: Text(
-                                  "Copied:ehfiohefoewhfio"));
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(snackbar);
-                        });
-                      },
-                      child: const Text(
-                          "Send Money to this number 9389282829}")),
-                ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+               Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                     InkWell(
+                    onTap: () {
+                      showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text("Bkash Deposit option"),
+                  
+                    actions:[
+                         Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                              
+                               SizedBox(height: height*0.03,),
+                                Row(
+                                  children: [
+                                      Text("মিনিমাম ডিপোজিট ৳20",style: GoogleFonts.lato(color: Colors.black,fontSize: 9,fontWeight: FontWeight.w500),),
+                                      Container(
+                                        height: height*0.03,
+                                        width: width*0.4,
+                                      decoration: BoxDecoration(  color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8)),
+                                        child:  Padding(
+                                          padding:  EdgeInsets.only(top: height*0.01),
+                                          child: TextField(
+                                            inputFormatters: [
+        LengthLimitingTextInputFormatter(11),
+      ],
+                                            textAlign: TextAlign.center,
+                                             style: const TextStyle(color: Colors.black),
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Entre ammount",
+                                              hintStyle: TextStyle(color: Colors.black)
+                                            ),
+              
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                ),
+          
+          
+          SizedBox(height: height*0.03,),
+          
+                                  Row(
+                                  children: [
+                                      Text("আপনে যে\n বিকাশ নাম্বার-\n থেকে টাকা পাঠাবেন সেই \nনাম্বার টি লিখুন ",style: GoogleFonts.lato(color: Colors.black,fontSize: 9,fontWeight: FontWeight.w500),),
+                                      Container(
+                                        height: height*0.03,
+                                        width: width*0.4,
+                                         decoration: BoxDecoration(  color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8)),
+                                        child:  Padding(
+                                           padding:  EdgeInsets.only(top: height*0.01),
+                                          child: TextField(
+                                              inputFormatters: [
+        LengthLimitingTextInputFormatter(15),
+      ],
+                                            textAlign: TextAlign.center,
+                                             style: const TextStyle(color: Colors.black),
+                                            decoration: const InputDecoration(
+                                              hintText: "Entre number",
+                                              hintStyle: TextStyle(color: Colors.black)
+                                            ),
+              
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                )
+                  ,
+              Text("নিচে দেওয়া নাম্বারটি পার্সোনাল নাম্বার।\n নাম্বার টি কপি করে সেন্ড মানি করুন",style: GoogleFonts.lato(color: Colors.black,
+              fontSize: 9,fontWeight: FontWeight.w500)),
+              Text("039082909902",style: GoogleFonts.lato(color: Colors.black,
+              fontSize: 9,fontWeight: FontWeight.w500),),
+          SizedBox(height: height*0.03,),
+          
+              Row(
+                                  children: [
+                                      Text("টাকা পাঠানোর পর -\nযে TRX ID টি পেয়েছেন-\n তা লিখুন",style: GoogleFonts.lato(color: Colors.black,fontSize: 9,fontWeight: FontWeight.w500),),
+                                      Container(
+                                        height: height*0.08,
+                                        width: width*0.4,
+                                        decoration: BoxDecoration(  color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8)),
+                                        child: Padding(
+                                          padding:  EdgeInsets.only(top: height*0.01),
+                                          child:  const TextField(
+                                            textAlign: TextAlign.center,
+                                             style: TextStyle(color: Colors.black),
+                                            decoration: InputDecoration(
+                                              hintText: "Entre transaction number",
+                                              hintStyle: TextStyle(color: Colors.black)
+                                            ),
+              
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                ),
+                  ElevatedButton(onPressed: (){}, child: const Text("Submit"))
+                  
+                              ],
+                            ),
+                          ),
+                        
 
-                DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    hint: Text(
-                      'Select Item',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).hintColor,
-                      ),
+                    ],
+                  ),
+                );
+                    },
+                    child: Container(
+                      height: height * 0.2,
+                      width: width * 0.45,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          image: const DecorationImage(
+                              image: AssetImage("assets/bkash.png"),
+                              fit: BoxFit.cover)),
                     ),
-                    items: items
-                        .map((item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ))
-                        .toList(),
-                    value: selectedValue,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedValue = value as String;
-                      });
-                    },
-                    buttonHeight: 40,
-                    buttonWidth: 140,
-                    itemHeight: 40,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: transactionId,
-                    decoration: const InputDecoration(
-                        hintText: "input your transactionId",
-                        border: OutlineInputBorder()),
-                  ),
-                ),
-                ElevatedButton(
-                    onPressed: () {
+               
+               
+               
+               /*.................................nogod.......................*/
 
+
+
+
+
+                 InkWell(
+                    onTap: () {
+                      showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text("Nogod Deposit option"),
+                  
+                    actions:[
+                         Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+      
+                                Row(
+                                  children: [
+                                      Text("মিনিমাম ডিপোজিট ৳20",style: GoogleFonts.lato(color: Colors.black,fontSize: 9,fontWeight: FontWeight.w500),),
+                                      Container(
+                                        height: height*0.03,
+                                        width: width*0.4,
+                                      decoration: BoxDecoration(  color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8)),
+                                        child:  Padding(
+                                          padding:  EdgeInsets.only(top: height*0.01),
+                                          child: TextField(
+                                            inputFormatters: [
+        LengthLimitingTextInputFormatter(11),
+      ],
+                                            textAlign: TextAlign.center,
+                                             style: const TextStyle(color: Colors.black),
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Entre ammount",
+                                              hintStyle: TextStyle(color: Colors.black)
+                                            ),
+              
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                ),
+          
+          
+          SizedBox(height: height*0.03,),
+          
+                                  Row(
+                                  children: [
+                                      Text("আপনে যে\n বিকাশ নাম্বার-\n থেকে টাকা পাঠাবেন সেই \nনাম্বার টি লিখুন ",style: GoogleFonts.lato(color: Colors.black,fontSize: 9,fontWeight: FontWeight.w500),),
+                                      Container(
+                                        height: height*0.03,
+                                        width: width*0.4,
+                                         decoration: BoxDecoration(  color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8)),
+                                        child:  Padding(
+                                           padding:  EdgeInsets.only(top: height*0.01),
+                                          child: TextField(
+                                              inputFormatters: [
+        LengthLimitingTextInputFormatter(15),
+      ],
+                                            textAlign: TextAlign.center,
+                                             style: const TextStyle(color: Colors.black),
+                                            decoration: const InputDecoration(
+                                              hintText: "Entre number",
+                                              hintStyle: TextStyle(color: Colors.black)
+                                            ),
+              
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                )
+                  ,
+              Text("নিচে দেওয়া নাম্বারটি পার্সোনাল নাম্বার।\n নাম্বার টি কপি করে সেন্ড মানি করুন",style: GoogleFonts.lato(color: Colors.black,
+              fontSize: 9,fontWeight: FontWeight.w500)),
+              Text("039082909902",style: GoogleFonts.lato(color: Colors.black,
+              fontSize: 9,fontWeight: FontWeight.w500),),
+          SizedBox(height: height*0.03,),
+          
+              Row(
+                                  children: [
+                                      Text("টাকা পাঠানোর পর -\nযে TRX ID টি পেয়েছেন-\n তা লিখুন",style: GoogleFonts.lato(color: Colors.black,fontSize: 9,fontWeight: FontWeight.w500),),
+                                      Container(
+                                        height: height*0.08,
+                                        width: width*0.4,
+                                        decoration: BoxDecoration(  color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8)),
+                                        child: Padding(
+                                          padding:  EdgeInsets.only(top: height*0.01),
+                                          child:  const TextField(
+                                            textAlign: TextAlign.center,
+                                             style: TextStyle(color: Colors.black),
+                                            decoration: InputDecoration(
+                                              hintText: "Entre transaction number",
+                                              hintStyle: TextStyle(color: Colors.black)
+                                            ),
+              
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                ),
+                  ElevatedButton(onPressed: (){}, child: const Text("Submit"))
+                  
+                              ],
+                            ),
+                          ),
+                        
+
+                    ],
+                  ),
+                );
                     },
-                    child: const Text("Send request"))
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 200,
-            child: Column(
-              children: [
-                StreamBuilder<MainAdminModel>(
-                    stream: fireBase.mainadmindatas(),
-                    builder: (context, snapshot) {
-                      return snapshot.hasData
-                          ? Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextButton(
-                            onPressed: () {
-                              Clipboard.setData(ClipboardData(
-                                  text: snapshot.data!.binaryaccount))
-                                  .then((value) {
-                                final snackbar = SnackBar(
-                                    content: Text(
-                                        "Copied: ${snapshot.data!.binaryaccount}"));
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackbar);
-                              });
-                            },
-                            child: Text(
-                                " Binance accpont:${snapshot.data!.binaryaccount}")),
-                      )
-                          : const CircularProgressIndicator();
-                    }),
-                DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    hint: Text(
-                      'Select Item',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).hintColor,
-                      ),
+                    child: Container(
+                      height: height * 0.2,
+                      width: width * 0.45,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                         ),
+                         child: SvgPicture.asset("assets/nogod.svg"),
                     ),
-                    items: items
-                        .map((item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ))
-                        .toList(),
-                    value: selectedValue,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedValue = value as String;
-                      });
-                    },
-                    buttonHeight: 40,
-                    buttonWidth: 140,
-                    itemHeight: 40,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: transactionId,
-                    decoration: const InputDecoration(
-                        hintText: "input your transactionId",
-                        border: OutlineInputBorder()),
-                  ),
-                ),
-                ElevatedButton(
-                    onPressed: () {
+                  )
+                
+               
+               
+                ],
+               ),
+                
+                
+                SizedBox(height: height*0.05,),
+                Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                     InkWell(
+                    onTap: () {
+                      showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text("Rocket Deposit option"),
+                  
+                    actions:[
+                         Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                
+                                Row(
+                                  children: [
+                                      Text("মিনিমাম ডিপোজিট ৳20",style: GoogleFonts.lato(color: Colors.black,fontSize: 9,fontWeight: FontWeight.w500),),
+                                      Container(
+                                        height: height*0.03,
+                                        width: width*0.4,
+                                      decoration: BoxDecoration(  color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8)),
+                                        child:  Padding(
+                                          padding:  EdgeInsets.only(top: height*0.01),
+                                          child: TextField(
+                                            inputFormatters: [
+        LengthLimitingTextInputFormatter(11),
+      ],
+                                            textAlign: TextAlign.center,
+                                             style: const TextStyle(color: Colors.black),
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Entre ammount",
+                                              hintStyle: TextStyle(color: Colors.black)
+                                            ),
+              
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                ),
+          
+          
+          SizedBox(height: height*0.03,),
+          
+                                  Row(
+                                  children: [
+                                      Text("আপনে যে\n বিকাশ নাম্বার-\n থেকে টাকা পাঠাবেন সেই \nনাম্বার টি লিখুন ",style: GoogleFonts.lato(color: Colors.black,fontSize: 9,fontWeight: FontWeight.w500),),
+                                      Container(
+                                        height: height*0.03,
+                                        width: width*0.4,
+                                         decoration: BoxDecoration(  color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8)),
+                                        child:  Padding(
+                                           padding:  EdgeInsets.only(top: height*0.01),
+                                          child: TextField(
+                                              inputFormatters: [
+        LengthLimitingTextInputFormatter(15),
+      ],
+                                            textAlign: TextAlign.center,
+                                             style: const TextStyle(color: Colors.black),
+                                            decoration: const InputDecoration(
+                                              hintText: "Entre number",
+                                              hintStyle: TextStyle(color: Colors.black)
+                                            ),
+              
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                )
+                  ,
+              Text("নিচে দেওয়া নাম্বারটি পার্সোনাল নাম্বার।\n নাম্বার টি কপি করে সেন্ড মানি করুন",style: GoogleFonts.lato(color: Colors.black,
+              fontSize: 9,fontWeight: FontWeight.w500)),
+              Text("039082909902",style: GoogleFonts.lato(color: Colors.white,
+              fontSize: 9,fontWeight: FontWeight.w500),),
+          SizedBox(height: height*0.03,),
+          
+              Row(
+                                  children: [
+                                      Text("টাকা পাঠানোর পর -\nযে TRX ID টি পেয়েছেন-\n তা লিখুন",style: GoogleFonts.lato(color: Colors.black,fontSize: 9,fontWeight: FontWeight.w500),),
+                                      Container(
+                                        height: height*0.08,
+                                        width: width*0.4,
+                                        decoration: BoxDecoration(  color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8)),
+                                        child: Padding(
+                                          padding:  EdgeInsets.only(top: height*0.01),
+                                          child:  const TextField(
+                                            textAlign: TextAlign.center,
+                                             style: TextStyle(color: Colors.black),
+                                            decoration: InputDecoration(
+                                              hintText: "Entre transaction number",
+                                              hintStyle: TextStyle(color: Colors.black)
+                                            ),
+              
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                ),
+                  ElevatedButton(onPressed: (){}, child: const Text("Submit"))
+                  
+                              ],
+                            ),
+                          ),
+                        
 
+                    ],
+                  ),
+                );
                     },
-                    child: const Text("Send request"))
-              ],
+                    child: Container(
+                      height: height * 0.2,
+                      width: width * 0.45,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                       ),
+                        child: SvgPicture.asset("assets/roket.svg"),
+                    ),
+                  ),
+               
+               
+               
+               /*.................................Upay.......................*/
+
+
+
+
+
+                 InkWell(
+                    onTap: () {
+                      showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text("Upay Deposit option"),
+                  
+                    actions:[
+                         Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                      Text("মিনিমাম ডিপোজিট ৳20",style: GoogleFonts.lato(color: Colors.black,fontSize: 9,fontWeight: FontWeight.w500),),
+                                      Container(
+                                        height: height*0.03,
+                                        width: width*0.4,
+                                      decoration: BoxDecoration(  color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8)),
+                                        child:  Padding(
+                                          padding:  EdgeInsets.only(top: height*0.01),
+                                          child: TextField(
+                                            inputFormatters: [
+        LengthLimitingTextInputFormatter(11),
+      ],
+                                            textAlign: TextAlign.center,
+                                             style: const TextStyle(color: Colors.black),
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "Entre ammount",
+                                              hintStyle: TextStyle(color: Colors.black)
+                                            ),
+              
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                ),
+          
+          
+          SizedBox(height: height*0.03,),
+          
+                                  Row(
+                                  children: [
+                                      Text("আপনে যে\n বিকাশ নাম্বার-\n থেকে টাকা পাঠাবেন সেই \nনাম্বার টি লিখুন ",style: GoogleFonts.lato(color: Colors.black,fontSize: 9,fontWeight: FontWeight.w500),),
+                                      Container(
+                                        height: height*0.03,
+                                        width: width*0.4,
+                                         decoration: BoxDecoration(  color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8)),
+                                        child:  Padding(
+                                           padding:  EdgeInsets.only(top: height*0.01),
+                                          child: TextField(
+                                              inputFormatters: [
+        LengthLimitingTextInputFormatter(15),
+      ],
+                                            textAlign: TextAlign.center,
+                                             style: const TextStyle(color: Colors.black),
+                                            decoration: const InputDecoration(
+                                              hintText: "Entre number",
+                                              hintStyle: TextStyle(color: Colors.black)
+                                            ),
+              
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                )
+                  ,
+              Text("নিচে দেওয়া নাম্বারটি পার্সোনাল নাম্বার।\n নাম্বার টি কপি করে সেন্ড মানি করুন",style: GoogleFonts.lato(color: Colors.black,
+              fontSize: 9,fontWeight: FontWeight.w500)),
+              Text("039082909902",style: GoogleFonts.lato(color: Colors.black,
+              fontSize: 9,fontWeight: FontWeight.w500),),
+          SizedBox(height: height*0.03,),
+          
+              Row(
+                                  children: [
+                                      Text("টাকা পাঠানোর পর -\nযে TRX ID টি পেয়েছেন-\n তা লিখুন",style: GoogleFonts.lato(color: Colors.white,fontSize: 9,fontWeight: FontWeight.w500),),
+                                      Container(
+                                        height: height*0.08,
+                                        width: width*0.4,
+                                        decoration: BoxDecoration(  color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8)),
+                                        child: Padding(
+                                          padding:  EdgeInsets.only(top: height*0.01),
+                                          child:  const TextField(
+                                            textAlign: TextAlign.center,
+                                             style: TextStyle(color: Colors.black),
+                                            decoration: InputDecoration(
+                                              hintText: "Entre transaction number",
+                                              hintStyle: TextStyle(color: Colors.black)
+                                            ),
+              
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                ),
+                  ElevatedButton(onPressed: (){}, child: const Text("Submit"))
+                  
+                              ],
+                            ),
+                          ),
+                        
+
+                    ],
+                  ),
+                );
+                    },
+                    child: Container(
+                      height: height * 0.2,
+                      width: width * 0.45,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                         ),
+                         child: SvgPicture.asset("assets/upay.svg"),
+                    ),
+                  )
+                
+               
+               
+                ],
+               )
+               
+                ],
+              ),
             ),
-          )
-        ]),
-      ),
+          )),
     );
   }
 }

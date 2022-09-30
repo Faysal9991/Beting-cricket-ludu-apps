@@ -25,7 +25,7 @@ class _NavegationBarState extends State<NavegationBar> {
          HomePage(),
     const HelpScreen(),
     const CoverstionScreen(),
-    const ProfileScreen(),
+     ProfileScreen(),
 
   ];
 

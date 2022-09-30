@@ -9,6 +9,7 @@ class BetingCard extends StatelessWidget {
     required this.width,
     required this.matchName,
     this.bordType,
+    this.matchDate,
     required this.image,
     required this.winngPrize,
     required this.entryFee,
@@ -28,6 +29,7 @@ class BetingCard extends StatelessWidget {
   final String matchType;
   final String matchStart;
   final String matchEnd;
+  final String? matchDate;
   final VoidCallback joinButtun;
 
   @override
@@ -60,7 +62,7 @@ class BetingCard extends StatelessWidget {
                       color: const Color(0xff469B4D)),
                 ),
               ),
-              Text("06/06/22",style: GoogleFonts.lato(
+              Text("matchDate",style: GoogleFonts.lato(
                       fontWeight: FontWeight.w400,
                       fontSize: 10,
                       color:Colors.black),),
