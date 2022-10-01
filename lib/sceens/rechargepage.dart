@@ -549,7 +549,7 @@ class _RechargeScreenState extends State<RechargeScreen> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8),
                          ),
-                         child: SvgPicture.asset("assets/upay.svg"),
+                         child: Image.network("https://sgp1.digitaloceanspaces.com/cosmosgroup/news/6986535_New%20Project%20(98).jpg"),
                     ),
                   )
                 

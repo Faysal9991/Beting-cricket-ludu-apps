@@ -148,7 +148,7 @@ class CricketFootballScreen extends StatelessWidget {
   showMaterialModalBottomSheet(
                                              context: context,
                                              builder: (context) => Container(
-                                               height: height*0.3,
+                                               height: height*0.4,
                                                width: width*0.9,
                                                color: Colors.black,
                                                child: Column(
@@ -170,7 +170,20 @@ class CricketFootballScreen extends StatelessWidget {
                                                    ),
                                                  ),
                                       Text("Potential wingings \$50.9",style: GoogleFonts.lato(color: Colors.white),),
-
+  Padding(
+                                                   padding: const EdgeInsets.all(8.0),
+                                                   child: Container(
+                                               
+                                                    color: Colors.white,
+                                                   width: width*4,
+                                                   height: height*0.04,
+                                                     child: TextField(
+                                                       decoration: InputDecoration(
+                                                        hintText: "your team name"
+                                                       ),                                   
+                                                     ),
+                                                   ),
+                                                 ),
   ElevatedButton(onPressed: (){}, child: Text("Submit and play")),
                                                    Text("Thank you for Playing games" ,style: GoogleFonts.ebGaramond(color: Colors.white,fontWeight: FontWeight.bold,fontSize:height*0.04),)
 
